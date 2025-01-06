@@ -1,70 +1,166 @@
-# Getting Started with Create React App
+# PDF Document Q&A System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack application that allows users to upload PDF documents and ask questions about their content using AI. The system leverages Google's Gemini model for natural language processing and vector similarity search for accurate document querying.
 
-## Available Scripts
+## Architecture
 
-In the project directory, you can run:
+The application consists of three main components:
 
-### `npm start`
+1. **Frontend (React)**: A modern web interface for document upload and interaction
+2. **Backend API (Express)**: Handles file storage and query logging
+3. **AI Service (FastAPI)**: Processes PDFs and handles Q&A functionality using LangChain and Google Gemini
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Frontend:
+  - React
+  - TailwindCSS
+  - DOMPurify for XSS protection
+- Backend:
+  - Express.js
+  - Multer for file uploads
+- AI Service:
+  - FastAPI
+  - LangChain
+  - Google Gemini API
+  - FAISS for vector similarity search
+  - PyMuPDF (fitz) for PDF processing
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14 or higher)
+- Python (3.8 or higher)
+- Google Gemini API key
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. Frontend Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+# Navigate to the frontend directory
+cd frontend
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Install dependencies
+npm install
 
-### `npm run eject`
+# Create .env file and add your configuration
+echo "REACT_APP_EXPRESS_API=http://localhost:5000/api" > .env
+echo "REACT_APP_FASTAPI_API=http://localhost:8000" >> .env
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 2. Express Backend Setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Navigate to the backend directory
+cd backend
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Install dependencies
+npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Create uploads directory
+mkdir uploads
+```
 
-## Learn More
+### 3. FastAPI Service Setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+# Navigate to the AI service directory
+cd ai-service
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-### Code Splitting
+# Install dependencies
+pip install -r requirements.txt
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Set up environment variables
+export GOOGLE_API_KEY=your_gemini_api_key  # On Windows: set GOOGLE_API_KEY=your_gemini_api_key
+```
 
-### Analyzing the Bundle Size
+## Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Update the `gemini_api_key` in the FastAPI service (`main.py`)
+2. Configure CORS settings in both backend services if needed
+3. Adjust file size limits in Express backend if required
 
-### Making a Progressive Web App
+## Running the Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. **Start the Express Backend**:
+```bash
+cd backend
+npm start
+# Server will start on http://localhost:5000
+```
 
-### Advanced Configuration
+2. **Start the FastAPI Service**:
+```bash
+cd ai-service
+uvicorn main:app --reload
+# Service will start on http://localhost:8000
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+3. **Start the Frontend**:
+```bash
+cd frontend
+npm start
+# Application will open on http://localhost:3000
+```
 
-### Deployment
+## Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- PDF document upload and processing
+- Real-time Q&A functionality
+- Context-aware responses using document content
+- Query logging and tracking
+- Caching system for improved performance
+- Markdown and code block support in responses
+- Progress indicators and loading states
+- Error handling and user feedback
 
-### `npm run build` fails to minify
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Express Backend
+
+- `POST /api/upload`: Upload PDF documents
+- `GET /api/documents`: List all uploaded documents
+- `POST /api/query/log`: Log user queries
+- `GET /api/queries/:documentId`: Get queries for a specific document
+
+### FastAPI Service
+
+- `POST /upload_pdf`: Process uploaded PDF documents
+- `POST /ask`: Handle Q&A queries
+
+## Development Guidelines
+
+1. **Error Handling**: All components include comprehensive error handling and user feedback
+2. **Security**: Implements file validation, XSS protection, and input sanitization
+3. **Performance**: Uses caching and optimized text processing for better response times
+4. **Scalability**: Modular design allows for easy expansion and modification
+
+## Production Considerations
+
+1. Replace in-memory storage with a proper database
+2. Implement user authentication and authorization
+3. Add rate limiting and additional security measures
+4. Set up proper logging and monitoring
+5. Configure proper CORS settings
+6. Use environment variables for all sensitive data
+7. Set up proper SSL/TLS certificates
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+MIT License
+
+## Support
+
+For support and questions, please open an issue in the repository.
