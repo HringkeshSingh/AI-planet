@@ -24,3 +24,4 @@ yarn-error.log*
 .env
 .venv
 Pipfile
+__pycache__
