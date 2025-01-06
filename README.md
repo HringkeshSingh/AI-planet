@@ -14,7 +14,7 @@ The application consists of three main components:
 
 - Frontend:
   - React
-  - TailwindCSS
+  - CSS
   - DOMPurify for XSS protection
 - Backend:
   - Express.js
