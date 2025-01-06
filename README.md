@@ -1,166 +1,169 @@
-# PDF Document Q&A System
+# PDF Q&A Assistant
 
-A full-stack application that allows users to upload PDF documents and ask questions about their content using AI. The system leverages Google's Gemini model for natural language processing and vector similarity search for accurate document querying.
-
-## Architecture
-
-The application consists of three main components:
-
-1. **Frontend (React)**: A modern web interface for document upload and interaction
-2. **Backend API (Express)**: Handles file storage and query logging
-3. **AI Service (FastAPI)**: Processes PDFs and handles Q&A functionality using LangChain and Google Gemini
-
-### Tech Stack
-
-- Frontend:
-  - React
-  - CSS
-  - DOMPurify for XSS protection
-- Backend:
-  - Express.js
-  - Multer for file uploads
-- AI Service:
-  - FastAPI
-  - LangChain
-  - Google Gemini API
-  - FAISS for vector similarity search
-  - PyMuPDF (fitz) for PDF processing
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- Python (3.8 or higher)
-- Google Gemini API key
-
-## Installation
-
-### 1. Frontend Setup
-
-```bash
-# Navigate to the frontend directory
-cd frontend
-
-# Install dependencies
-npm install
-
-# Create .env file and add your configuration
-echo "REACT_APP_EXPRESS_API=http://localhost:5000/api" > .env
-echo "REACT_APP_FASTAPI_API=http://localhost:8000" >> .env
-```
-
-### 2. Express Backend Setup
-
-```bash
-# Navigate to the backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Create uploads directory
-mkdir uploads
-```
-
-### 3. FastAPI Service Setup
-
-```bash
-# Navigate to the AI service directory
-cd ai-service
-
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
-export GOOGLE_API_KEY=your_gemini_api_key  # On Windows: set GOOGLE_API_KEY=your_gemini_api_key
-```
-
-## Configuration
-
-1. Update the `gemini_api_key` in the FastAPI service (`main.py`)
-2. Configure CORS settings in both backend services if needed
-3. Adjust file size limits in Express backend if required
-
-## Running the Application
-
-1. **Start the Express Backend**:
-```bash
-cd backend
-npm start
-# Server will start on http://localhost:5000
-```
-
-2. **Start the FastAPI Service**:
-```bash
-cd ai-service
-uvicorn main:app --reload
-# Service will start on http://localhost:8000
-```
-
-3. **Start the Frontend**:
-```bash
-cd frontend
-npm start
-# Application will open on http://localhost:3000
-```
+Transform the way you interact with PDF documents using our cutting-edge AI-powered application. This full-stack solution enables natural conversations with your PDF content, leveraging Google's Gemini model to provide accurate, context-aware responses to your questions.
 
 ## Features
 
-- PDF document upload and processing
-- Real-time Q&A functionality
-- Context-aware responses using document content
-- Query logging and tracking
-- Caching system for improved performance
-- Markdown and code block support in responses
-- Progress indicators and loading states
-- Error handling and user feedback
+Our application combines powerful functionality with an intuitive user experience:
+
+- **Intelligent Document Processing**: Upload any PDF document and start asking questions immediately about its content
+- **Natural Language Understanding**: Engage in fluid conversations with the AI about your documents
+- **Advanced Search Capabilities**: Utilizes vector similarity search to find the most relevant information
+- **Real-time Interaction**: Get instant, context-aware responses powered by Google Gemini
+- **Rich Text Support**: Handles code blocks and formatted text in both questions and answers
+- **Historical Tracking**: Maintains a record of your queries for future reference
+
+## Technology Foundation
+
+### Frontend Architecture
+The user interface is built with modern web technologies:
+- React.js for creating a dynamic and responsive user experience
+- Custom CSS implementations for polished visual design
+- DOMPurify integration for secure content rendering
+
+### Backend Systems
+Our server infrastructure consists of two complementary services:
+- FastAPI handling AI operations and response generation
+- Express.js managing data persistence and server operations
+- Knex.js providing robust database interaction capabilities
+
+### Data Management
+- PostgreSQL database for efficient storage of documents and query history
+
+## Getting Started
+
+### 1. Initial Setup
+Clone the repository and navigate to the project directory:
+```bash
+git clone https://github.com/HringkeshSingh/AI-planet.git
+cd AI-planet
+```
+
+### 2. Frontend Configuration
+Set up the React application:
+```bash
+cd src
+npm install
+cp .env.example .env
+npm start run
+```
+
+### 3. Express Backend Setup
+Configure the server component:
+```bash
+cd server
+npm install
+mkdir uploads
+npm i -g nodemon
+nodemon server.js
+```
+
+### 4. AI Service Configuration
+Prepare the AI service environment:
+```bash
+cd ai-service
+python -m venv venv
+source venv/bin/activate  # For Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+Note: Add your Gemini API key to main.py before starting the service
+
+### 5. Environment Configuration
+
+Create environment files with the following configurations:
+
+**Frontend (.env):**
+```
+REACT_APP_EXPRESS_API=http://localhost:5000/api
+REACT_APP_FASTAPI_API=http://localhost:8000
+```
+
+## Database Management
+
+Our project uses Knex.js for database migrations, ensuring consistent schema management across environments. Key database management commands include:
+
+```bash
+# Create a new migration
+npx knex migrate:make migration_name
+
+# Apply migrations
+npx knex migrate:latest
+
+# Rollback migrations
+npx knex migrate:rollback
+```
+
+## Project Structure
+```
+AI-planet/
+├── Server/
+│   ├── Database/         # Database configurations
+│   ├── models/          # Data models
+│   ├── uploads/         # PDF storage
+│   ├── server.js        # Express backend
+│   ├── main.py         # FastAPI service
+├── src/                # React frontend
+│   ├── App.js          # Main component
+│   ├── App.css         # Styling
+├── public/            # Static assets
+```
 
 ## API Endpoints
 
-### Express Backend
+### Express Backend (Port 5000)
+- `POST /api/upload` - Document upload endpoint
+- `GET /api/documents` - Document listing
+- `POST /api/query/log` - Query logging
+- `GET /api/queries/:documentId` - Query retrieval
 
-- `POST /api/upload`: Upload PDF documents
-- `GET /api/documents`: List all uploaded documents
-- `POST /api/query/log`: Log user queries
-- `GET /api/queries/:documentId`: Get queries for a specific document
+### AI Service (Port 8000)
+- `POST /upload_pdf` - PDF processing
+- `POST /ask` - Q&A endpoint
 
-### FastAPI Service
+## Development Environment
 
-- `POST /upload_pdf`: Process uploaded PDF documents
-- `POST /ask`: Handle Q&A queries
+Access the application components at:
+- Frontend: http://localhost:3000
+- Express Backend: http://localhost:5000
+- FastAPI Service: http://localhost:8000
 
-## Development Guidelines
+## Prerequisites
 
-1. **Error Handling**: All components include comprehensive error handling and user feedback
-2. **Security**: Implements file validation, XSS protection, and input sanitization
-3. **Performance**: Uses caching and optimized text processing for better response times
-4. **Scalability**: Modular design allows for easy expansion and modification
+- Node.js version 14 or higher
+- Python 3.8 or higher
+- Google Gemini API key
+- PostgreSQL database
 
-## Production Considerations
+## Security Considerations
 
-1. Replace in-memory storage with a proper database
-2. Implement user authentication and authorization
-3. Add rate limiting and additional security measures
-4. Set up proper logging and monitoring
-5. Configure proper CORS settings
-6. Use environment variables for all sensitive data
-7. Set up proper SSL/TLS certificates
+Before deploying to production, ensure you:
+- Configure appropriate CORS settings
+- Implement robust authentication
+- Set reasonable file upload limits
+- Use environment variables for sensitive data
+- Implement rate limiting
 
 ## Contributing
 
+We welcome contributions! Please follow these steps:
+
 1. Fork the repository
 2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+3. Make your changes
+4. Commit with clear messages
+5. Submit a pull request
 
-## License
+## Licensing
 
-MIT License
+This project is licensed under the MIT License, allowing for free use and modification.
 
-## Support
+## Acknowledgments
 
-For support and questions, please open an issue in the repository.
+This project builds on the work of several outstanding open-source projects:
+- Google Gemini for AI capabilities
+- LangChain for AI framework
+- FAISS for similarity search
+- And many other open-source contributors
+
+---
+Built with dedication by the development team.
