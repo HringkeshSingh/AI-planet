@@ -61,10 +61,10 @@ nodemon server.js
 ### 4. AI Service Configuration
 Prepare the AI service environment:
 ```bash
-cd ai-service
+cd server
 python -m venv venv
 source venv/bin/activate  # For Windows: venv\Scripts\activate
-pip install -r requirements.txt
+pip install #Add all the packages required for main.py to work
 ```
 Note: Add your Gemini API key to main.py before starting the service
 
